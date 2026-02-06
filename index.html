@@ -3,85 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PULSE VAULT | Stirling</title>
+    <meta name="color-scheme" content="dark">
+    <title>PULSE VAULT</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; }
-        .neon-glow { text-shadow: 0 0 15px #00ffff; }
-        canvas { display: block; filter: blur(0.5px) contrast(1.2); }
+        :root { background-color: #000000; }
+        body { margin: 0; background-color: #000000; overflow: hidden; color: #00ffff; }
+        canvas { display: block; background-color: #000000; }
     </style>
 </head>
-<body>
-    <div class="absolute inset-0 z-10 flex flex-col justify-between p-8 pointer-events-none">
-        <div>
-            <h1 class="text-cyan-400 text-2xl font-bold tracking-widest neon-glow">PULSE VAULT</h1>
-            <div class="flex items-center mt-2">
-                <div id="status-led" class="w-2 h-2 rounded-full bg-gray-600 mr-2 shadow-[0_0_8px_#444]"></div>
-                <p class="text-cyan-900 text-[10px] tracking-[0.2em] uppercase font-mono">320KBPS UPLINK ACTIVE</p>
-            </div>
-        </div>
-        <div class="flex justify-center mb-16">
-            <button id="play-btn" class="pointer-events-auto group bg-black/40 border border-cyan-500/50 p-8 rounded-full hover:border-cyan-400 transition-all shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-                <div id="play-icon" class="w-10 h-10 text-cyan-400"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-                <div id="pause-icon" class="w-10 h-10 text-cyan-400 hidden"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></div>
-            </button>
-        </div>
-    </div>
-    <div id="canvas-container"></div>
+<body style="background-color: #000000;">
     <script>
-        const STREAM_URL = "https://agi-music-radio-706deac7.radiocult.fm/stream";
-        const audio = new Audio(STREAM_URL);
-        audio.crossOrigin = "anonymous";
-        let isPlaying = false;
-
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000); // Explicitly black
+        
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setClearColor(0x000000, 1);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        document.body.appendChild(renderer.domElement);
 
-        // Using MeshBasicMaterial so it ignores lighting and stays VIBRANT
-        const geometry = new THREE.IcosahedronGeometry(1.2, 12);
+        // GEOMETRY
+        const geometry = new THREE.IcosahedronGeometry(1.5, 10);
+        
+        // Using a "Luminance" trick to fight Dark Mode overrides
         const material = new THREE.MeshBasicMaterial({ 
             color: 0x00ffff, 
             wireframe: true,
-            transparent: true,
-            opacity: 0.7
+            transparent: false,
+            opacity: 1
         });
+        
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
 
-        camera.position.z = 3.5;
+        camera.position.z = 4;
 
         function animate() {
             requestAnimationFrame(animate);
-            sphere.rotation.y += 0.004;
+            sphere.rotation.y += 0.005;
             sphere.rotation.x += 0.002;
-            
-            if (isPlaying) {
-                const time = Date.now() * 0.003;
-                const pulse = 1 + Math.sin(time) * 0.08;
-                sphere.scale.set(pulse, pulse, pulse);
-                material.opacity = 0.5 + Math.sin(time) * 0.3;
-            }
             renderer.render(scene, camera);
         }
         animate();
-
-        document.getElementById('play-btn').onclick = () => {
-            if (!isPlaying) {
-                audio.play(); isPlaying = true;
-                document.getElementById('play-icon').classList.add('hidden');
-                document.getElementById('pause-icon').classList.remove('hidden');
-                document.getElementById('status-led').className = 'w-2 h-2 rounded-full bg-cyan-400 mr-2 shadow-[0_0_12px_#00ffff]';
-            } else {
-                audio.pause(); isPlaying = false;
-                document.getElementById('play-icon').classList.remove('hidden');
-                document.getElementById('pause-icon').classList.add('hidden');
-                document.getElementById('status-led').className = 'w-2 h-2 rounded-full bg-gray-600 mr-2';
-            }
-        };
 
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
