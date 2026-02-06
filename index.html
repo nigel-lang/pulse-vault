@@ -3,60 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pulse Collective // Studio</title>
+    <title>Pulse CollEctive // Studio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { margin: 0; background-color: #000 !important; overflow: hidden; }
-        /* This forces the Cyan even if the browser tries to turn it white */
-        canvas { 
-            display: block; 
-            filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8)) hue-rotate(0deg);
-        }
-        .left-align-text {
+        body { margin: 0; background-color: #000 !important; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #ui-layer {
             position: absolute;
-            top: 40px;
-            left: 40px;
-            z-index: 20;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
             pointer-events: none;
+        }
+        .neon-text {
+            color: #00ffff !important;
+            font-family: sans-serif;
+            text-transform: none;
+            text-shadow: 0 0 20px rgba(0,255,255,0.8);
         }
     </style>
 </head>
 <body>
 
-    <div class="left-align-text">
-        <h1 style="color: #00ffff; font-weight: bold; letter-spacing: 0.1em; font-size: 1.5rem;">
-            Pulse Collective // Studio
+    <div id="ui-layer">
+        <h1 class="neon-text font-bold tracking-widest text-4xl md:text-6xl mb-4">
+            Pulse CollEctive // Studio
         </h1>
-        <p style="color: #008888; font-size: 0.7rem; letter-spacing: 0.3em; margin-top: 5px;">
-            STIRLING_UPLINK_01
-        </p>
+        <p class="text-cyan-700 tracking-[0.5em] text-xs uppercase">Stirling _ Uplink</p>
     </div>
 
-    <div id="canvas-container"></div>
+    <div id="canvas-container" style="position: absolute; inset: 0;"></div>
 
     <script>
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setClearColor(0x000000, 1);
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 1);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // GEOMETRY - Forced Cyan
-        const geometry = new THREE.IcosahedronGeometry(1.5, 8);
-        const material = new THREE.MeshBasicMaterial({ 
+        // Forced Color Logic: Lambert responds to lights better than Basic
+        const geometry = new THREE.IcosahedronGeometry(1.5, 12);
+        const material = new THREE.MeshLambertMaterial({ 
             color: 0x00ffff, 
-            wireframe: true 
+            wireframe: true,
+            emissive: 0x00ffff,
+            emissiveIntensity: 0.5
         });
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
+
+        // High Intensity Lights to force color through Dark Mode filters
+        const light = new THREE.PointLight(0x00ffff, 2, 100);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x00ffff, 0.5));
 
         camera.position.z = 4;
 
         function animate() {
             requestAnimationFrame(animate);
             sphere.rotation.y += 0.005;
+            sphere.rotation.x += 0.002;
             renderer.render(scene, camera);
         }
         animate();
