@@ -6,30 +6,63 @@
     <title>PMC | Command Console</title>
     <style>
         body, html { margin: 0; padding: 0; background-color: #000; overflow: hidden; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #fff; }
+        
+        /* THE STABLE GLOBE */
         #globe-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.5; pointer-events: none; }
-        #globe-container iframe { width: 100%; height: 100%; border: none; filter: grayscale(1) brightness(0.8); }
+        #globe-container iframe { width: 100%; height: 100%; border: none; }
+
         #hud { position: relative; z-index: 10; height: 100vh; width: 100vw; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+
+        /* BRANDING: CENTERED & STYLED */
         .header { margin-top: 8vh; text-align: center; width: 100%; pointer-events: auto; }
-        .header h1 { font-size: clamp(2.2rem, 8vw, 5rem); letter-spacing: 20px; margin: 0; font-weight: 900; }
+        .header h1 { font-size: clamp(2.2rem, 8vw, 5rem); letter-spacing: 20px; margin: 0; font-weight: 900; text-indent: 20px; }
         .header p { font-size: 0.8rem; letter-spacing: 8px; color: #888; text-transform: uppercase; margin-top: 10px; }
         .header p span.highlight { color: #00FFFF; font-weight: bold; }
-        .docked-player { position: absolute; bottom: 100px; left: 40px; pointer-events: auto; width: 380px; background: rgba(10, 10, 10, 0.9); border-left: 4px solid #00FFFF; border-radius: 0 20px 20px 0; padding: 15px; backdrop-filter: blur(20px); box-shadow: 20px 20px 60px rgba(0,0,0,0.8); }
-        .swarm-nav { position: absolute; right: 40px; top: 25%; pointer-events: auto; display: flex; flex-direction: column; gap: 15px; text-align: right; }
-        .swarm-btn { background: none; border: none; color: #444; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+
+        /* PLAYER: DOCKED BOTTOM LEFT */
+        .docked-player {
+            position: absolute; bottom: 100px; left: 40px;
+            pointer-events: auto; width: 380px;
+            background: rgba(10, 10, 10, 0.9);
+            border-left: 4px solid #00FFFF;
+            border-radius: 0 20px 20px 0;
+            padding: 15px;
+            backdrop-filter: blur(20px);
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.8);
+        }
+
+        /* SWARM NAV: RIGHT SIDE */
+        .swarm-nav {
+            position: absolute; right: 40px; top: 25%;
+            pointer-events: auto; display: flex; flex-direction: column; gap: 15px;
+            text-align: right;
+        }
+        .swarm-btn {
+            background: none; border: none; color: #444; font-size: 0.7rem; letter-spacing: 3px; 
+            cursor: pointer; text-transform: uppercase; transition: 0.3s;
+        }
         .swarm-btn:hover { color: #00FFFF; }
         .swarm-btn.active { color: #fff; border-right: 2px solid #00FFFF; padding-right: 10px; }
-        .footer-tag { position: absolute; bottom: 40px; width: 100%; text-align: center; font-size: 0.65rem; letter-spacing: 6px; color: #555; text-transform: uppercase; }
+
+        /* THE FOOTER */
+        .footer-tag { 
+            position: absolute; bottom: 40px; width: 100%; text-align: center; 
+            font-size: 0.65rem; letter-spacing: 6px; color: #555; text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
+
     <div id="globe-container">
-        <iframe src="https://marian42.github.io/proceduralart/"></iframe>
+        <iframe src="https://vault.agimusicradio.com/" allowtransparency="true"></iframe>
     </div>
+
     <div id="hud">
         <div class="header">
             <h1>PULSE</h1>
             <p>MUSIC COLLECTIV<span class="highlight">E</span></p>
         </div>
+
         <div class="swarm-nav">
             <button class="swarm-btn active">Global Hub</button>
             <button class="swarm-btn">Fintech</button>
@@ -37,11 +70,19 @@
             <button class="swarm-btn">Stirling Local</button>
             <button class="swarm-btn">Sentinel Alerts</button>
         </div>
+
         <div class="docked-player">
             <div style="margin-bottom: 10px; font-size: 0.6rem; color: #00FFFF; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7;">System Uplink: Active</div>
-            <iframe src="https://app.radiocult.fm/embed/player/agi-music-radio-706deac7?theme=midnight&primaryColor=%2300FFFF&corners=rounded&playerDisplay=metadata" width="100%" height="100" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
+            <iframe
+                src="https://app.radiocult.fm/embed/player/agi-music-radio-706deac7?theme=midnight&primaryColor=%2300FFFF&corners=rounded&playerDisplay=metadata"
+                width="100%" height="100" scrolling="no" frameborder="0" allowtransparency="true">
+            </iframe>
         </div>
-        <div class="footer-tag">SENTINEL NETWORK | STIRLING UPLINK | 2026</div>
+
+        <div class="footer-tag">
+            SENTINEL NETWORK | STIRLING UPLINK | 2026
+        </div>
     </div>
+
 </body>
 </html>
